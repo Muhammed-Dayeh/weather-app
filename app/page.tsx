@@ -4,12 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
 import { 
   Cloud, 
   Sun, 
@@ -21,8 +18,7 @@ import {
   Droplets, 
   Thermometer, 
   MapPin, 
-  Search, 
-  Moon, 
+  Search,  
   SunMoon, 
   Globe,
   Star,
@@ -52,6 +48,7 @@ interface ForecastData {
 
 const translations = {
   en: {
+    todaysWeather: 'Todays Weather',
     title: 'Weather App',
     search: 'Search city...',
     searchButton: 'Search',
@@ -75,6 +72,7 @@ const translations = {
     months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   },
   ar: {
+    todaysWeather: 'حالة الطقس اليوم',
     title: 'تطبيق الطقس',
     search: 'البحث عن مدينة...',
     searchButton: 'بحث',
@@ -98,6 +96,7 @@ const translations = {
     months: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
   },
   tr: {
+    todaysWeather: 'Bugünün Hava Durumu',
     title: 'Hava Durumu',
     search: 'Şehir ara...',
     searchButton: 'Ara',
@@ -181,7 +180,6 @@ export default function WeatherApp() {
   const [city, setCity] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [darkMode, setDarkMode] = useState(false);
   const [language, setLanguage] = useState<'en' | 'ar' | 'tr'>('en');
   const [favoriteCity, setFavoriteCity] = useState<string>('');
 
@@ -205,16 +203,10 @@ export default function WeatherApp() {
     } else {
       getCurrentLocation();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('darkMode', darkMode.toString());
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
+  
 
   useEffect(() => {
     localStorage.setItem('language', language);
@@ -248,14 +240,11 @@ export default function WeatherApp() {
     setError('');
     
     try {
-      console.log('Fetching weather for:', cityName);
       
       // Fetch current weather
       const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cityName)}&appid=${API_KEY}&units=metric`;
-      console.log('Weather URL:', weatherUrl);
       
       const weatherResponse = await fetch(weatherUrl);
-      console.log('Weather response status:', weatherResponse.status);
       
       if (!weatherResponse.ok) {
         const errorText = await weatherResponse.text();
@@ -271,7 +260,6 @@ export default function WeatherApp() {
       }
       
       const weatherJson = await weatherResponse.json();
-      console.log('Weather data:', weatherJson);
       
       const currentWeather: WeatherData = {
         name: weatherJson.name,
@@ -287,10 +275,8 @@ export default function WeatherApp() {
       
       // Fetch 5-day forecast
       const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(cityName)}&appid=${API_KEY}&units=metric`;
-      console.log('Forecast URL:', forecastUrl);
       
       const forecastResponse = await fetch(forecastUrl);
-      console.log('Forecast response status:', forecastResponse.status);
       
       if (!forecastResponse.ok) {
         const errorText = await forecastResponse.text();
@@ -299,7 +285,6 @@ export default function WeatherApp() {
       }
       
       const forecastJson = await forecastResponse.json();
-      console.log('Forecast data:', forecastJson);
       
       // Process forecast data - get one forecast per day at noon
       const dailyForecasts: ForecastData[] = [];
@@ -357,7 +342,6 @@ export default function WeatherApp() {
       
       setWeatherData(currentWeather);
       setForecastData(dailyForecasts.slice(0, 5));
-      console.log('Weather data set successfully');
     } catch (err) {
       console.error('Error fetching weather:', err);
       setError(err instanceof Error ? err.message : t.error);
@@ -371,14 +355,11 @@ export default function WeatherApp() {
     setError('');
     
     try {
-      console.log('Fetching weather for coordinates:', lat, lon);
       
       // Fetch current weather by coordinates
       const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
-      console.log('Weather URL:', weatherUrl);
       
       const weatherResponse = await fetch(weatherUrl);
-      console.log('Weather response status:', weatherResponse.status);
       
       if (!weatherResponse.ok) {
         const errorText = await weatherResponse.text();
@@ -392,7 +373,6 @@ export default function WeatherApp() {
       }
       
       const weatherJson = await weatherResponse.json();
-      console.log('Weather data:', weatherJson);
       
       const currentWeather: WeatherData = {
         name: weatherJson.name,
@@ -408,10 +388,8 @@ export default function WeatherApp() {
       
       // Fetch 5-day forecast by coordinates
       const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
-      console.log('Forecast URL:', forecastUrl);
       
       const forecastResponse = await fetch(forecastUrl);
-      console.log('Forecast response status:', forecastResponse.status);
       
       if (!forecastResponse.ok) {
         const errorText = await forecastResponse.text();
@@ -420,7 +398,6 @@ export default function WeatherApp() {
       }
       
       const forecastJson = await forecastResponse.json();
-      console.log('Forecast data:', forecastJson);
       
       // Process forecast data - get one forecast per day at noon
       const dailyForecasts: ForecastData[] = [];
@@ -478,7 +455,6 @@ export default function WeatherApp() {
       
       setWeatherData(currentWeather);
       setForecastData(dailyForecasts.slice(0, 5));
-      console.log('Weather data set successfully');
     } catch (err) {
       console.error('Error fetching weather:', err);
       setError(err instanceof Error ? err.message : t.error);
@@ -625,6 +601,7 @@ export default function WeatherApp() {
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-6">
+                <p className="text-white text-xl font-bold mt-12 ml-28 "> {t.todaysWeather}</p>
                   <div className="text-center">
                     <div className="flex justify-center mb-4">
                       {getWeatherIcon(weatherData.main, 80)}
