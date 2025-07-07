@@ -191,11 +191,11 @@ export default function WeatherApp() {
 
   useEffect(() => {
     // Load saved preferences
-    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    
     const savedLanguage = (localStorage.getItem('language') as 'en' | 'ar' | 'tr') || 'en';
     const savedFavorite = localStorage.getItem('favoriteCity') || '';
     
-    setDarkMode(savedDarkMode);
+    
     setLanguage(savedLanguage);
     setFavoriteCity(savedFavorite);
     
@@ -556,17 +556,7 @@ export default function WeatherApp() {
               <Separator className="my-4 bg-white/20" />
               
               <div className="flex flex-wrap gap-4 items-center justify-center">
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="dark-mode"
-                    checked={darkMode}
-                    onCheckedChange={setDarkMode}
-                  />
-                  <Label htmlFor="dark-mode" className="text-white flex items-center gap-2">
-                    <Moon className="w-4 h-4" />
-                    {t.darkMode}
-                  </Label>
-                </div>
+                
                 
                 <div className="flex items-center space-x-2">
                   <Globe className="w-4 h-4 text-white" />
