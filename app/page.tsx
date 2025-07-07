@@ -186,8 +186,8 @@ export default function WeatherApp() {
   const [favoriteCity, setFavoriteCity] = useState<string>('');
 
   const t = translations[language];
-  // Using a working demo API key - replace with your own for production
-  const API_KEY = '57ed55c97463c816dbda629839b969ea';
+  // Using a working API key
+  const API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
 
   useEffect(() => {
     // Load saved preferences
