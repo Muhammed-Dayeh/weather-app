@@ -547,7 +547,7 @@ export default function WeatherApp() {
                   </Button>
                 </form>
                 
-                <Button onClick={getCurrentLocation} variant="outline" className="border-white/30 text-white hover:bg-white/20">
+                <Button onClick={getCurrentLocation} variant="outline" className="border-white/30 text-black hover:bg-white/20">
                   <MapPin className="w-4 h-4 mr-2" />
                   {t.currentLocation}
                 </Button>
